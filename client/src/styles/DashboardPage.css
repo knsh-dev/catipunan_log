@@ -1,0 +1,520 @@
+/* client/src/styles/DashboardPage.css */
+
+/* ── Page wrapper ── */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px 28px 32px;
+  background: #FAF6EE;
+  min-height: calc(100vh - 73px);
+  overflow-y: auto;
+}
+
+/* ── Greeting Bar ── */
+.greeting-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid #EDE8DD;
+  border-radius: 12px;
+  padding: 14px 22px;
+}
+
+.greeting-text {
+  font-size: 15px;
+  color: #444;
+  font-weight: 400;
+}
+
+.greeting-text strong {
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.greeting-date {
+  font-size: 14px;
+  color: #888;
+  font-weight: 400;
+}
+
+/* ── Error Banner ── */
+.dash-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #B91C1C;
+  font-weight: 500;
+}
+
+.dash-error svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.dash-error-retry {
+  margin-left: auto;
+  background: #B91C1C;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Skeleton ── */
+.skeleton {
+  background: linear-gradient(90deg, #EDE8DD 25%, #F5F1E8 50%, #EDE8DD 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  display: block;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Metric Cards Row ── */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.metric-card {
+  background: #FFFFFF;
+  border: 1px solid #EDE8DD;
+  border-radius: 14px;
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 110px;
+}
+
+.metric-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-label {
+  font-size: 13px;
+  color: #888;
+  font-weight: 400;
+}
+
+.metric-icon {
+  width: 20px;
+  height: 20px;
+  color: #C8B99A;
+  display: flex;
+  align-items: center;
+}
+
+.metric-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.metric-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1A1A1A;
+  line-height: 1.1;
+}
+
+.metric-value--large {
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.metric-card--large .metric-label {
+  font-size: 12.5px;
+}
+
+/* ── Panels ── */
+.panel {
+  background: #FFFFFF;
+  border: 1px solid #EDE8DD;
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+
+.pill-badge {
+  font-size: 12px;
+  color: #666;
+  border: 1.5px solid #DDD;
+  border-radius: 50px;
+  padding: 4px 14px;
+  font-weight: 500;
+  background: #FEFCF5;
+}
+
+/* ── Mid Row: Chart + Top Products ── */
+.mid-row {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 14px;
+}
+
+.chart-panel {
+  min-height: 320px;
+}
+
+.top-products-panel {
+  min-height: 320px;
+}
+
+/* ── Top Products List ── */
+.top-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.top-product-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FAFAF8;
+  border: 1px solid #EDE8DD;
+  border-radius: 10px;
+  padding: 11px 16px;
+}
+
+.top-product-name {
+  font-size: 13.5px;
+  color: #1A1A1A;
+  font-weight: 400;
+}
+
+.top-product-qty {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* ── Bottom Row ── */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  gap: 14px;
+}
+
+/* ── Low Stock ── */
+.low-stock-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.low-stock-item {
+  border: 1.5px solid #F0D0C8;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #FFFAF9;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.low-stock-name {
+  font-size: 13.5px;
+  color: #1A1A1A;
+  font-weight: 400;
+}
+
+.low-stock-bottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.low-stock-qty {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.low-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #C0392B;
+  background: #FEE8E5;
+  border: 1px solid #F5B8B0;
+  border-radius: 50px;
+  padding: 2px 9px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Payments ── */
+.payments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.payment-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid #F0EBE0;
+  padding: 9px 4px;
+}
+
+.payment-item:last-child {
+  border-bottom: none;
+}
+
+.payment-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.payment-order {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+
+.payment-method {
+  font-size: 12px;
+  color: #888;
+}
+
+.payment-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.payment-amount {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.payment-time {
+  font-size: 12px;
+  color: #AAA;
+}
+
+/* ── Bookings ── */
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.booking-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid #F0EBE0;
+  padding: 9px 4px;
+}
+
+.booking-item:last-child {
+  border-bottom: none;
+}
+
+.booking-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.booking-time {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.booking-user {
+  font-size: 12px;
+  color: #888;
+}
+
+.booking-size {
+  font-size: 13px;
+  color: #666;
+  font-weight: 400;
+  align-self: center;
+}
+
+.see-all-btn {
+  font-size: 12px;
+  color: #666;
+  background: #FFFFFF;
+  border: 1.5px solid #DDD;
+  border-radius: 50px;
+  padding: 4px 14px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.see-all-btn:hover {
+  background: #F0EBE0;
+  border-color: #C8B99A;
+}
+
+/* ── Empty State ── */
+.empty-state {
+  font-size: 12.5px;
+  color: #BBB;
+  text-align: center;
+  padding: 16px 0;
+  font-style: italic;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mid-row {
+    grid-template-columns: 1fr;
+  }
+  .bottom-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 14px 16px 24px;
+  }
+  .metrics-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Clickable metric cards ─── */
+.metric-card--clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.metric-card-arrow {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #888;
+  text-align: right;
+}
+
+/* ── Chart Range Dropdown ── */
+.chart-range-dropdown {
+  position: relative;
+}
+
+.chart-range-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #555;
+  border: 1.5px solid #DDD;
+  border-radius: 50px;
+  padding: 5px 14px;
+  font-weight: 500;
+  background: #FEFCF5;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.chart-range-btn:hover {
+  background: #F0EBE0;
+  border-color: #C8B99A;
+}
+
+.chart-range-arrow {
+  font-size: 11px;
+  display: inline-block;
+  transition: transform 0.18s ease;
+  line-height: 1;
+}
+
+.chart-range-arrow--open {
+  transform: rotate(180deg);
+}
+
+.chart-range-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid #E0D9CE;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  overflow: hidden;
+  z-index: 100;
+  min-width: 148px;
+  animation: dropdown-appear 0.15s ease;
+}
+
+@keyframes dropdown-appear {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.chart-range-option {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.chart-range-option:hover {
+  background: #F5F0E8;
+}
+
+.chart-range-option--active {
+  color: #1A1A1A;
+  font-weight: 700;
+  background: #F0EBE0;
+}

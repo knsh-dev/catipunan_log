@@ -1,0 +1,97 @@
+/* client/src/styles/TopBar.css */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px 16px;
+  background: #FEFCF5;
+  border-bottom: 1px solid #EDE8DD;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #1A1A1A;
+  letter-spacing: -0.3px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1.5px solid #E2DDD0;
+  border-radius: 50px;
+  padding: 8px 16px;
+  min-width: 220px;
+}
+
+.topbar-search svg {
+  width: 15px;
+  height: 15px;
+  color: #AAA;
+  flex-shrink: 0;
+}
+
+.topbar-search-input {
+  border: none;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+  outline: none;
+  width: 100%;
+  cursor: default;
+}
+
+.topbar-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #E2DDD0;
+  background: #FFFFFF;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.topbar-icon-btn:hover {
+  background: #F0EBE0;
+  color: #1A1A1A;
+  border-color: #C8B99A;
+}
+
+.topbar-icon-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.topbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1A1A1A;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  cursor: default;
+  user-select: none;
+}
