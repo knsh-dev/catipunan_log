@@ -122,22 +122,44 @@ export default function DashboardPage({ user, onNavigate }) {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  const MetricCard = ({ label, value, Icon, large, page }) => (
-    <div
-      className={`metric-card${large ? ' metric-card--large' : ''}${page ? ' metric-card--clickable' : ''}`}
-      onClick={page && onNavigate ? () => onNavigate(page) : undefined}
-      style={page ? { cursor: 'pointer' } : {}}
-    >
-      <div className="metric-card-header">
-        <span className="metric-label">{label}</span>
-        {Icon && <span className="metric-icon"><Icon /></span>}
+  const MetricCard = ({ label, value, Icon, large, page, anchor, anchorLabel }) => {
+    // Anchoring Principle: show % change vs a reference/baseline value
+    const renderAnchor = () => {
+      if (loading) return <Skeleton h="14px" w="90px" r="4px" />;
+      if (anchor === undefined || anchor === null) return null;
+      const current = parseFloat(String(value).replace(/[^0-9.]/g, '')) || 0;
+      const ref     = parseFloat(String(anchor).replace(/[^0-9.]/g, '')) || 0;
+      if (ref === 0) return <span className="anchor-label">{anchorLabel || 'No prior data'}</span>;
+      const pct = ((current - ref) / ref) * 100;
+      const up  = pct >= 0;
+      return (
+        <div className="anchor-row">
+          <span className={`anchor-badge ${up ? 'anchor-badge--up' : 'anchor-badge--down'}`}>
+            {up ? '▲' : '▼'} {Math.abs(pct).toFixed(1)}%
+          </span>
+          <span className="anchor-label">{anchorLabel || 'vs prior period'}</span>
+        </div>
+      );
+    };
+
+    return (
+      <div
+        className={`metric-card${large ? ' metric-card--large' : ''}${page ? ' metric-card--clickable' : ''}`}
+        onClick={page && onNavigate ? () => onNavigate(page) : undefined}
+        style={page ? { cursor: 'pointer' } : {}}
+      >
+        <div className="metric-card-header">
+          <span className="metric-label">{label}</span>
+          {Icon && <span className="metric-icon"><Icon /></span>}
+        </div>
+        <div className={`metric-value${large ? ' metric-value--large' : ''}`}>
+          {loading ? <Skeleton h="32px" w="120px" r="6px" /> : value}
+        </div>
+        {renderAnchor()}
+        {page && <span className="metric-card-arrow">→</span>}
       </div>
-      <div className={`metric-value${large ? ' metric-value--large' : ''}`}>
-        {loading ? <Skeleton h="32px" w="120px" r="6px" /> : value}
-      </div>
-      {page && <span className="metric-card-arrow">→</span>}
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="dashboard">
@@ -157,9 +179,12 @@ export default function DashboardPage({ user, onNavigate }) {
       )}
 
       <div className="metrics-row">
-        <MetricCard label="Monthly Sales"          value={formatPeso(data?.monthlySales)} Icon={MoneyIcon} page="payment" />
-        <MetricCard label="Orders Today"           value={data?.ordersToday ?? 0}         Icon={OrderIcon} page="pos" />
-        <MetricCard label="Today's Total Revenue"  value={formatPeso(data?.orderRevenue)} Icon={RevenueIcon} page="payment" />
+        <MetricCard label="Monthly Sales"          value={formatPeso(data?.monthlySales)} Icon={MoneyIcon} page="payment"
+          anchor={data?.prevMonthlySales}       anchorLabel="vs last month" />
+        <MetricCard label="Orders Today"           value={data?.ordersToday ?? 0}         Icon={OrderIcon} page="pos"
+          anchor={data?.prevOrdersToday}        anchorLabel="vs yesterday" />
+        <MetricCard label="Today's Total Revenue"  value={formatPeso(data?.orderRevenue)} Icon={RevenueIcon} page="payment"
+          anchor={data?.prevOrderRevenue}       anchorLabel="vs yesterday" />
         <MetricCard label="Weekly Favorite Product" value={data?.weeklyFavorite || '—'}   Icon={StarIcon} large page="products" />
       </div>
 

@@ -114,11 +114,49 @@ const getDashboardData = async (req, res) => {
       { replacements: { today: todayStr }, type: QueryTypes.SELECT }
     );
 
+    // ── Anchoring Principle: prior-period baselines ───────────
+
+    // Prior month's sales (anchor for Monthly Sales card)
+    const [prevMonthlySalesRow] = await sequelize.query(
+      `SELECT
+         COALESCE((SELECT SUM(o.total_amount) FROM \`ORDER\` o
+                   WHERE o.status='completed'
+                     AND YEAR(o.created_at)=YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+                     AND MONTH(o.created_at)=MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))),0)
+         +COALESCE((SELECT SUM(b.booking_fee) FROM CATROOMBOOKING b
+                    WHERE YEAR(b.check_in)=YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+                      AND MONTH(b.check_in)=MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))),0)
+         AS prev_monthly_sales`,
+      { type: QueryTypes.SELECT }
+    );
+
+    // Yesterday's order count (anchor for Orders Today card)
+    const [prevOrdersRow] = await sequelize.query(
+      `SELECT COUNT(*) AS prev_orders FROM \`ORDER\`
+       WHERE DATE(created_at)=DATE_SUB(:today, INTERVAL 1 DAY) AND status='completed'`,
+      { replacements: { today: todayStr }, type: QueryTypes.SELECT }
+    );
+
+    // Yesterday's revenue (anchor for Today's Total Revenue card)
+    const [prevRevenueRow] = await sequelize.query(
+      `SELECT
+         COALESCE((SELECT SUM(o.total_amount) FROM \`ORDER\` o
+                   WHERE o.status='completed' AND DATE(o.created_at)=DATE_SUB(:today, INTERVAL 1 DAY)),0)
+         +COALESCE((SELECT SUM(b.booking_fee) FROM CATROOMBOOKING b
+                    WHERE DATE(b.check_in)=DATE_SUB(:today, INTERVAL 1 DAY)),0)
+         AS prev_revenue`,
+      { replacements: { today: todayStr }, type: QueryTypes.SELECT }
+    );
+
     return res.status(200).json({
-      monthlySales:   parseFloat(monthlySalesRow?.monthly_sales      || 0),
-      ordersToday:    parseInt(ordersRow?.orders_today               || 0),
-      orderRevenue:   parseFloat(revenueRow?.total_revenue_today     || 0),
-      weeklyFavorite: weeklyFav?.[0]?.product_name                   || '—',
+      monthlySales:      parseFloat(monthlySalesRow?.monthly_sales      || 0),
+      ordersToday:       parseInt(ordersRow?.orders_today               || 0),
+      orderRevenue:      parseFloat(revenueRow?.total_revenue_today     || 0),
+      weeklyFavorite:    weeklyFav?.[0]?.product_name                   || '—',
+      // Anchoring baselines
+      prevMonthlySales:  parseFloat(prevMonthlySalesRow?.prev_monthly_sales || 0),
+      prevOrdersToday:   parseInt(prevOrdersRow?.prev_orders               || 0),
+      prevOrderRevenue:  parseFloat(prevRevenueRow?.prev_revenue            || 0),
       salesChart,
       topProducts,
       lowStock,
