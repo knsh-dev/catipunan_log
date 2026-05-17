@@ -38,10 +38,6 @@ module.exports = {
       { action: 'consumed',   quantity_change:  -2, inventory_id:  4, user_id: 4, createdAt: ts( 0,'11','40'), updatedAt: ts( 0,'11','40') }, // Cappuccino
       { action: 'consumed',   quantity_change:  -3, inventory_id:  5, user_id: 2, createdAt: ts( 0,'15','40'), updatedAt: ts( 0,'15','40') }, // Matcha Latte
       { action: 'consumed',   quantity_change:  -1, inventory_id:  7, user_id: 4, createdAt: ts( 0,'15','45'), updatedAt: ts( 0,'15','45') }, // Butter Croissant
-
-      // Adjustments / waste
-      { action: 'adjustment', quantity_change:  -3, inventory_id:  7, user_id: 1, createdAt: ts(-2,'18','00'), updatedAt: ts(-2,'18','00') }, // Butter Croissant (expired)
-      { action: 'adjustment', quantity_change:  -2, inventory_id:  8, user_id: 1, createdAt: ts(-1,'18','00'), updatedAt: ts(-1,'18','00') }, // Cheese Sandwich (expired)
     ], {});
   },
 
