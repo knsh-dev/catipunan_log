@@ -226,22 +226,22 @@ export default function BookingsPage({ user }) {
     fetchBookings();
   }, [fetchSummary, fetchBookings]);
 
-  // ── Auto-activate: poll every 60s, activate confirmed bookings whose check_in has passed ──
+  // ── Auto-sync: poll every 30s — confirmed→active, active→completed ──
   useEffect(() => {
-    const autoActivate = async () => {
+    const autoSync = async () => {
       try {
         const token = localStorage.getItem('token');
         await fetch('/api/bookings/auto-activate', {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Refresh list silently after activation
+        // Refresh list and summary silently after sync
         fetchBookings();
         fetchSummary();
       } catch { /* silent */ }
     };
-    autoActivate(); // run immediately on mount
-    const interval = setInterval(autoActivate, 60000); // then every 60s
+    autoSync(); // run immediately on mount
+    const interval = setInterval(autoSync, 30000); // then every 30s
     return () => clearInterval(interval);
   }, [fetchBookings, fetchSummary]);
 

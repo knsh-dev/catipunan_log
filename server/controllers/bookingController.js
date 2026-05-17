@@ -124,9 +124,11 @@ const updateBookingStatus = async (req, res) => {
 };
 
 // ── POST /api/bookings/auto-activate ─────────────────────────
-// Sets confirmed bookings to active when check_in time has passed
+// Confirmed → Active when check_in has passed
+// Active    → Completed when check_out has passed
 const autoActivateBookings = async (req, res) => {
   try {
+    // 1. Activate confirmed bookings whose check_in has passed
     await sequelize.query(
       `UPDATE CATROOMBOOKING
        SET status = 'active'
@@ -134,7 +136,17 @@ const autoActivateBookings = async (req, res) => {
          AND check_in <= NOW()`,
       { type: QueryTypes.UPDATE }
     );
-    return res.status(200).json({ message: 'Auto-activate complete.' });
+
+    // 2. Complete active bookings whose check_out has passed
+    await sequelize.query(
+      `UPDATE CATROOMBOOKING
+       SET status = 'completed'
+       WHERE status = 'active'
+         AND check_out <= NOW()`,
+      { type: QueryTypes.UPDATE }
+    );
+
+    return res.status(200).json({ message: 'Auto-sync complete.' });
   } catch (err) {
     console.error('Auto-activate error:', err);
     return res.status(500).json({ message: 'Auto-activate failed.' });
