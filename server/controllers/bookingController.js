@@ -36,11 +36,38 @@ const getBookingSummary = async (req, res) => {
       { type: QueryTypes.SELECT }
     );
 
+    // ── Anchoring Principle: prior-period baselines ───────────
+
+    // Previous month's booking revenue
+    const [prevMonthlyRev] = await sequelize.query(
+      `SELECT COALESCE(SUM(booking_fee), 0) AS prev_monthly_revenue
+       FROM CATROOMBOOKING
+       WHERE YEAR(check_in)=YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+         AND MONTH(check_in)=MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))`,
+      { type: QueryTypes.SELECT }
+    );
+    // Yesterday's booking count
+    const [prevTodayCount] = await sequelize.query(
+      `SELECT COUNT(*) AS prev_bookings FROM CATROOMBOOKING
+       WHERE DATE(check_in)=DATE_SUB(:today, INTERVAL 1 DAY)`,
+      { replacements: { today: todayStr }, type: QueryTypes.SELECT }
+    );
+    // Yesterday's booking revenue
+    const [prevTodayRev] = await sequelize.query(
+      `SELECT COALESCE(SUM(booking_fee), 0) AS prev_today_revenue FROM CATROOMBOOKING
+       WHERE DATE(check_in)=DATE_SUB(:today, INTERVAL 1 DAY)`,
+      { replacements: { today: todayStr }, type: QueryTypes.SELECT }
+    );
+
     return res.status(200).json({
-      monthlyRevenue:  parseFloat(monthlyRev?.monthly_revenue || 0),
-      bookingsToday:   parseInt(todayCount?.bookings_today    || 0),
-      todayRevenue:    parseFloat(todayRev?.today_revenue     || 0),
-      upcomingCount:    parseInt(upcomingRow?.upcoming_count || 0),
+      monthlyRevenue:      parseFloat(monthlyRev?.monthly_revenue    || 0),
+      bookingsToday:       parseInt(todayCount?.bookings_today        || 0),
+      todayRevenue:        parseFloat(todayRev?.today_revenue         || 0),
+      upcomingCount:       parseInt(upcomingRow?.upcoming_count       || 0),
+      // Anchoring baselines
+      prevMonthlyRevenue:  parseFloat(prevMonthlyRev?.prev_monthly_revenue || 0),
+      prevBookingsToday:   parseInt(prevTodayCount?.prev_bookings          || 0),
+      prevTodayRevenue:    parseFloat(prevTodayRev?.prev_today_revenue      || 0),
     });
   } catch (err) {
     console.error('Booking summary error:', err);

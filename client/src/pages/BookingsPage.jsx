@@ -179,6 +179,21 @@ function StatusChanger({ booking, onStatusChange }) {
   );
 }
 
+// ── Anchor Badge (Anchoring Principle) ────────────────────────
+function AnchorBadge({ current, reference, label }) {
+  if (!reference) return <span className="bk-anchor-label">{label}: no prior data</span>;
+  const pct = ((current - reference) / reference) * 100;
+  const up  = pct >= 0;
+  return (
+    <div className="bk-anchor-row">
+      <span className={`bk-anchor-badge ${up ? 'bk-anchor-badge--up' : 'bk-anchor-badge--down'}`}>
+        {up ? '▲' : '▼'} {Math.abs(pct).toFixed(1)}%
+      </span>
+      <span className="bk-anchor-label">{label}</span>
+    </div>
+  );
+}
+
 // ── Main Component ─────────────────────────────────────────────
 export default function BookingsPage({ user }) {
   const [bookings, setBookings] = useState([]);
@@ -326,18 +341,21 @@ export default function BookingsPage({ user }) {
           <span className="bk-metric-value">
             {summary === null ? <span className="bk-metric-skeleton" /> : formatPeso(summary.monthlyRevenue)}
           </span>
+          {summary !== null && <AnchorBadge current={summary.monthlyRevenue} reference={summary.prevMonthlyRevenue} label="vs last month" />}
         </div>
         <div className="bk-metric-card">
           <span className="bk-metric-label">Bookings Today</span>
           <span className="bk-metric-value">
             {summary === null ? <span className="bk-metric-skeleton" /> : summary.bookingsToday}
           </span>
+          {summary !== null && <AnchorBadge current={summary.bookingsToday} reference={summary.prevBookingsToday} label="vs yesterday" />}
         </div>
         <div className="bk-metric-card">
           <span className="bk-metric-label">Today's Revenue</span>
           <span className="bk-metric-value">
             {summary === null ? <span className="bk-metric-skeleton" /> : formatPeso(summary.todayRevenue)}
           </span>
+          {summary !== null && <AnchorBadge current={summary.todayRevenue} reference={summary.prevTodayRevenue} label="vs yesterday" />}
         </div>
         <div className="bk-metric-card">
           <span className="bk-metric-label">Upcoming Bookings</span>
